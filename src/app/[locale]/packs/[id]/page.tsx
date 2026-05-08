@@ -10,6 +10,16 @@ async function getPack(id: string) {
   return data as Pack | null;
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; id: string }> }) {
+  const { locale, id } = await params;
+  const pack = await getPack(id);
+  if (!pack) return { title: 'Not Found' };
+  return {
+    title: `Sky Travel – ${locale === 'fr' ? pack.title_fr : pack.title_en}`,
+    robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  };
+}
+
 export default async function PackDetailPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params;
   const pack = await getPack(id);

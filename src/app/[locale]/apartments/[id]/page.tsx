@@ -20,7 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale, id } = await params;
   const { apartment } = await getApartment(id);
   if (!apartment) return { title: 'Not Found' };
-  return { title: `Sky Travel – ${locale === 'fr' ? apartment.title_fr : apartment.title_en}` };
+  return {
+    title: `Sky Travel – ${locale === 'fr' ? apartment.title_fr : apartment.title_en}`,
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: { index: false, follow: false },
+    },
+  };
 }
 
 export default async function ApartmentDetailPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
