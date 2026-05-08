@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { Apartment } from '@/lib/types';
-import ApartmentCard from '@/components/ApartmentCard';
+import ApartmentsGrid from '@/components/ApartmentsGrid';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -31,20 +31,7 @@ export default async function ApartmentsPage({ params }: { params: Promise<{ loc
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        {apartments.length === 0 ? (
-          <div className="text-center py-20 text-slate-400">
-            <p className="text-lg">{t('no_results')}</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {apartments.map(apt => (
-              <ApartmentCard key={apt.id} apartment={apt} />
-            ))}
-          </div>
-        )}
-      </div>
+      <ApartmentsGrid apartments={apartments} locale={locale} noResultsText={t('no_results')} />
     </div>
   );
 }

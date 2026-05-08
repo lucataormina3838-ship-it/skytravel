@@ -358,6 +358,40 @@ export default function ApartmentDetailClient({ apartment, blockedDates, locale 
                 ))}
               </div>
             </div>
+
+            {/* Google Maps */}
+            <div>
+              <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-sky-500" />
+                {t('location')}
+              </h2>
+              <div className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+                <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2 text-sm text-slate-600">
+                  <MapPin className="w-4 h-4 text-sky-500 flex-shrink-0" />
+                  {apartment.location}
+                </div>
+                <iframe
+                  title="Localisation"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(apartment.location + ', Sardegna, Italia')}&output=embed`}
+                />
+                <div className="px-4 py-3 border-t border-slate-100">
+                  <a
+                    href={`https://www.google.com/maps/search/${encodeURIComponent(apartment.location + ', Sardegna')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sky-500 hover:text-sky-600 text-sm font-medium flex items-center gap-1.5"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    {locale === 'fr' ? 'Ouvrir dans Google Maps' : 'Open in Google Maps'}
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right: Booking widget */}
