@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plane, LayoutDashboard, Home, Package, CalendarCheck, LogOut, Menu, X } from 'lucide-react';
+import { Plane, LayoutDashboard, Home, Package, CalendarCheck, LogOut, Menu, X, BarChart2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'sky-travel-admin-2024';
@@ -75,6 +75,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     { href: `/${locale}/admin/apartments`, label: 'Appartements', icon: Home },
     { href: `/${locale}/admin/packs`, label: 'Packs', icon: Package },
     { href: `/${locale}/admin/bookings`, label: 'Réservations', icon: CalendarCheck },
+    { href: `/${locale}/admin/analytics`, label: 'Statistiques', icon: BarChart2 },
   ];
 
   return (
