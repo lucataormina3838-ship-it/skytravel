@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /fr/apartments/
+Disallow: /en/apartments/
+Disallow: /fr/packs/
+Disallow: /en/packs/
+Disallow: /fr/admin/
+Disallow: /en/admin/
