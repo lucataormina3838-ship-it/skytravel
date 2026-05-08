@@ -16,60 +16,98 @@ export default async function Image() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #0f172a 0%, #0c4a6e 60%, #0e7490 100%)',
+          background: 'linear-gradient(135deg, #0f172a 0%, #0c4a6e 55%, #0e7490 100%)',
           position: 'relative',
-          fontFamily: 'serif',
+          overflow: 'hidden',
         }}
       >
-        {/* Cercles décoratifs */}
+        {/* Cercle décoratif haut droite */}
         <div style={{
-          position: 'absolute', top: '-80px', right: '-80px',
-          width: '400px', height: '400px', borderRadius: '50%',
-          background: 'rgba(14, 116, 144, 0.15)', display: 'flex',
+          position: 'absolute', top: '-100px', right: '-100px',
+          width: '450px', height: '450px', borderRadius: '50%',
+          border: '2px solid rgba(184,134,11,0.3)',
+          display: 'flex',
         }} />
         <div style={{
-          position: 'absolute', bottom: '-60px', left: '-60px',
+          position: 'absolute', top: '-60px', right: '-60px',
+          width: '350px', height: '350px', borderRadius: '50%',
+          border: '1px solid rgba(184,134,11,0.15)',
+          display: 'flex',
+        }} />
+
+        {/* Cercle bas gauche */}
+        <div style={{
+          position: 'absolute', bottom: '-80px', left: '-80px',
           width: '300px', height: '300px', borderRadius: '50%',
-          background: 'rgba(14, 116, 144, 0.1)', display: 'flex',
+          border: '2px solid rgba(184,134,11,0.2)',
+          display: 'flex',
         }} />
 
-        {/* Logo */}
-        <img
-          src="https://skytravel-sardinia.vercel.app/logo.png"
-          width={220}
-          height={120}
-          style={{ objectFit: 'contain', marginBottom: '32px' }}
-        />
-
-        {/* Titre */}
+        {/* Badge */}
         <div style={{
-          fontSize: '52px', fontWeight: 'bold', color: 'white',
-          letterSpacing: '-1px', marginBottom: '16px', textAlign: 'center',
+          background: 'rgba(184,134,11,0.2)',
+          border: '1px solid rgba(184,134,11,0.5)',
+          borderRadius: '50px',
+          padding: '8px 24px',
+          marginBottom: '32px',
           display: 'flex',
         }}>
-          Séjours en Sardaigne
+          <span style={{ color: '#b8860b', fontSize: '18px', fontWeight: 600, letterSpacing: '3px' }}>
+            BASÉ EN FRANCE · SARDAIGNE
+          </span>
         </div>
+
+        {/* Nom de la marque */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: '24px',
+        }}>
+          <span style={{
+            fontSize: '96px',
+            fontWeight: 900,
+            color: 'white',
+            letterSpacing: '-4px',
+            lineHeight: 1,
+            display: 'flex',
+          }}>
+            SKY
+          </span>
+          <span style={{
+            fontSize: '96px',
+            fontWeight: 900,
+            color: '#b8860b',
+            letterSpacing: '-4px',
+            lineHeight: 1,
+            display: 'flex',
+          }}>
+            TRAVEL
+          </span>
+        </div>
+
+        {/* Ligne */}
+        <div style={{
+          width: '100px', height: '3px',
+          background: 'linear-gradient(90deg, transparent, #b8860b, transparent)',
+          marginBottom: '24px',
+          display: 'flex',
+        }} />
 
         {/* Sous-titre */}
         <div style={{
-          fontSize: '26px', color: '#bae6fd',
-          textAlign: 'center', maxWidth: '700px',
-          lineHeight: '1.4', display: 'flex',
+          fontSize: '28px',
+          color: '#bae6fd',
+          letterSpacing: '1px',
+          display: 'flex',
         }}>
-          Appartements & Packs Découverte — Basé en France
+          Séjours & Appartements de Charme
         </div>
 
-        {/* Ligne décorative */}
+        {/* URL bas */}
         <div style={{
-          width: '80px', height: '3px',
-          background: '#b8860b', marginTop: '28px',
-          borderRadius: '2px', display: 'flex',
-        }} />
-
-        {/* URL */}
-        <div style={{
-          position: 'absolute', bottom: '28px',
-          fontSize: '18px', color: 'rgba(186, 230, 253, 0.7)',
+          position: 'absolute', bottom: '30px',
+          fontSize: '18px', color: 'rgba(186,230,253,0.5)',
           display: 'flex',
         }}>
           skytravel-sardinia.vercel.app
