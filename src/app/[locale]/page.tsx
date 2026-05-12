@@ -14,8 +14,22 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'hero' });
-  return { title: `Sky Travel – ${t('title')}` };
+  const isFr = locale === 'fr';
+  return {
+    title: isFr
+      ? 'Sky Travel – Location de vacances en Sardaigne pour francophones'
+      : 'Sky Travel – Holiday rentals in Sardinia for French speakers',
+    description: isFr
+      ? 'Agence de location en Sardaigne tenue par des Sardes francophones. Appartements et villas vue mer, packs découverte authentiques. Réservation directe, sans intermédiaire, en français.'
+      : 'Sardinia rental agency run by Sardinian French speakers. Sea view apartments and villas, authentic discovery packs. Direct booking, no middleman, in French.',
+    alternates: {
+      canonical: `https://skytravel-sardinia.vercel.app/${locale}`,
+      languages: {
+        fr: 'https://skytravel-sardinia.vercel.app/fr',
+        en: 'https://skytravel-sardinia.vercel.app/en',
+      },
+    },
+  };
 }
 
 async function getData() {
@@ -43,8 +57,68 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     { value: '4.8/5', label: tHome('stats_rating') },
   ];
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TravelAgency',
+    name: 'Sky Travel Sardaigne',
+    description: locale === 'fr'
+      ? 'Agence de location de vacances en Sardaigne pour francophones. Appartements et villas avec piscine, vue mer. Excursions bateau Cala Luna, Cala Mariolu. Réservation directe sans intermédiaire.'
+      : 'Holiday rental agency in Sardinia for French speakers. Apartments and villas with pool, sea view. Boat trips to Cala Luna, Cala Mariolu. Direct booking, no middleman.',
+    url: `https://skytravel-sardinia.vercel.app/${locale}`,
+    email: 'skytravel.sardegna@gmail.com',
+    telephone: '+33770018291',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Orosei',
+      addressRegion: 'Sardaigne',
+      addressCountry: 'IT',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 40.3784,
+      longitude: 9.6966,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: 'Sardaigne, Italie',
+      geo: { '@type': 'GeoCoordinates', latitude: 40.1209, longitude: 9.0129 },
+    },
+    availableLanguage: [
+      { '@type': 'Language', name: 'French' },
+      { '@type': 'Language', name: 'English' },
+    ],
+    priceRange: '€€',
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '09:00', closes: '19:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '10:00', closes: '17:00' },
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: locale === 'fr' ? 'Logements en Sardaigne' : 'Sardinia accommodations',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'LodgingBusiness', name: 'Villetta Blanca', address: 'Costa Paradiso, Sardaigne' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'LodgingBusiness', name: 'Résidence Badesi', address: 'Badesi, Sardaigne' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'LodgingBusiness', name: "Resort L'Émeraude", address: 'Santa Maria e Mare, Orosei, Sardaigne' } },
+      ],
+    },
+    sameAs: [
+      'https://www.instagram.com/skytravel_sardinia',
+      'https://www.facebook.com/skytravel.sardinia',
+    ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '24',
+      bestRating: '5',
+    },
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <HeroSection
         badge={t('badge')}

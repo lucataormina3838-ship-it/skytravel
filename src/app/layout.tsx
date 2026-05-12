@@ -5,16 +5,31 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sky Travel – Séjours en Sardaigne",
-  description: "Location de vacances et packs découverte en Sardaigne. Appartements vue mer, sorties en bateau, excursions quad, nuits en forêt.",
+  metadataBase: new URL("https://skytravel-sardinia.vercel.app"),
+  title: {
+    default: "Sky Travel – Location de vacances en Sardaigne",
+    template: "%s | Sky Travel Sardaigne",
+  },
+  description: "Agence de location de vacances en Sardaigne pour francophones. Appartements et villas vue mer soigneusement sélectionnés. Réservez directement avec des Sardes francophones — sans intermédiaire.",
+  keywords: [
+    "location vacances Sardaigne", "appartement Sardaigne", "villa Sardaigne",
+    "séjour Sardaigne francophones", "location Costa Paradiso", "vacances Sardaigne été",
+    "agence location Sardaigne", "location piscine Sardaigne", "villa piscine vue mer Sardaigne",
+    "excursion bateau Cala Luna", "excursion bateau Cala Gonone", "location appartement Orosei",
+    "Sardaigne sans intermédiaire", "location Sardaigne pas cher", "villa Sardaigne piscine privée",
+    "séjour Sardaigne agence française", "Cala Mariolu excursion", "Golfe de Orosei location",
+  ],
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  authors: [{ name: "Sky Travel" }],
+  creator: "Sky Travel",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
     shortcut: "/logo.png",
   },
   openGraph: {
-    title: "Sky Travel – Séjours en Sardaigne",
-    description: "Location de vacances et packs découverte en Sardaigne. Appartements vue mer, sorties en bateau, excursions quad.",
+    title: "Sky Travel – Location de vacances en Sardaigne",
+    description: "Appartements et villas en Sardaigne sélectionnés par des Sardes francophones. Réservation directe, sans intermédiaire.",
     url: "https://skytravel-sardinia.vercel.app",
     siteName: "Sky Travel",
     images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Sky Travel – Sardaigne" }],
@@ -23,9 +38,19 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sky Travel – Séjours en Sardaigne",
-    description: "Appartements et packs découverte en Sardaigne",
+    title: "Sky Travel – Location de vacances en Sardaigne",
+    description: "Appartements et villas en Sardaigne sélectionnés par des Sardes francophones.",
     images: ["/logo.png"],
+  },
+  alternates: {
+    canonical: "https://skytravel-sardinia.vercel.app/fr",
+    languages: {
+      "fr": "https://skytravel-sardinia.vercel.app/fr",
+      "en": "https://skytravel-sardinia.vercel.app/en",
+    },
+  },
+  verification: {
+    google: "0S7RkzFZCtUs67H5NV20sPmGrff1ok8XDWizcDheIhk",
   },
 };
 
