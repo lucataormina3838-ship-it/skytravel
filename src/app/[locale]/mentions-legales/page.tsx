@@ -1,8 +1,10 @@
-export async function generateMetadata() {
-  return { title: 'Sky Travel – Mentions légales' };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return { title: locale === 'fr' ? 'Sky Travel – Mentions légales' : 'Sky Travel – Legal Notice' };
 }
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage({ params }: { params: Promise<{ locale: string }> }) {
+  await params; // required by Next.js 15
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-gradient-to-br from-slate-800 to-sky-900 pt-32 pb-16 px-4 text-center">
