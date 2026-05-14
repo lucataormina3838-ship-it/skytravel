@@ -76,8 +76,9 @@ export default function Footer() {
             © {new Date().getFullYear()} Sky Travel. {t('rights')}.
           </p>
           <div className="flex gap-6 text-sm">
-            <a href="#" className="text-slate-500 hover:text-sky-400 transition-colors">{t('privacy')}</a>
-            <a href="#" className="text-slate-500 hover:text-sky-400 transition-colors">{t('terms')}</a>
+            <AnyLink href="/privacy" className="text-slate-500 hover:text-sky-400 transition-colors">{t('privacy')}</AnyLink>
+            <AnyLink href="/cgv" className="text-slate-500 hover:text-sky-400 transition-colors">{t('terms')}</AnyLink>
+            <AnyLink href="/mentions-legales" className="text-slate-500 hover:text-sky-400 transition-colors">Mentions légales</AnyLink>
           </div>
         </div>
       </div>

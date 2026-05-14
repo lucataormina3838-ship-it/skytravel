@@ -16,58 +16,166 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
         <p className="text-slate-300 mt-4">{isFr ? 'Dernière mise à jour : mai 2026' : 'Last updated: May 2026'}</p>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-16 prose prose-slate">
-        {isFr ? (
-          <div className="space-y-8 text-slate-700">
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">1. Collecte des données</h2>
-              <p>Sky Travel collecte les informations que vous nous fournissez lors d'une demande de réservation : nom, prénom, adresse email, numéro de téléphone, et dates de séjour. Ces données sont utilisées uniquement pour traiter votre réservation et vous contacter.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">2. Utilisation des données</h2>
-              <p>Vos données personnelles sont utilisées pour : traiter vos demandes de réservation, vous envoyer les confirmations et devis par email, améliorer nos services. Nous ne vendons jamais vos données à des tiers.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">3. Conservation des données</h2>
-              <p>Vos données sont conservées pendant une durée maximale de 3 ans à compter de votre dernière interaction avec nos services, conformément à la réglementation française.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">4. Vos droits (RGPD)</h2>
-              <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants : accès, rectification, suppression, portabilité de vos données. Pour exercer ces droits, contactez-nous à : <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a></p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">5. Cookies</h2>
-              <p>Notre site utilise des cookies techniques nécessaires au bon fonctionnement du site. Aucun cookie publicitaire ou de traçage tiers n'est utilisé.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">6. Contact</h2>
-              <p>Pour toute question concernant cette politique : <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a></p>
-            </section>
-          </div>
-        ) : (
-          <div className="space-y-8 text-slate-700">
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">1. Data Collection</h2>
-              <p>Sky Travel collects the information you provide when making a booking request: first name, last name, email address, phone number, and stay dates. This data is used solely to process your booking and contact you.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">2. Use of Data</h2>
-              <p>Your personal data is used to: process your booking requests, send you confirmations and quotes by email, improve our services. We never sell your data to third parties.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">3. Data Retention</h2>
-              <p>Your data is retained for a maximum of 3 years from your last interaction with our services.</p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">4. Your Rights (GDPR)</h2>
-              <p>Under GDPR, you have the following rights: access, rectification, deletion, and portability of your data. To exercise these rights, contact us at: <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a></p>
-            </section>
-            <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-3">5. Contact</h2>
-              <p>For any questions regarding this policy: <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a></p>
-            </section>
-          </div>
-        )}
+      <div className="max-w-3xl mx-auto px-4 py-16">
+        <div className="space-y-8 text-slate-700">
+          {isFr ? (
+            <>
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">1. Responsable du traitement</h2>
+                <p>
+                  Le responsable du traitement des données personnelles est :<br />
+                  <strong>Sky Travel</strong> — intermédiaire de conciergerie touristique<br />
+                  Contact : <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a> — +33 7 70 01 82 91
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">2. Données collectées</h2>
+                <p>Sky Travel collecte les données que vous nous fournissez lors d'une demande de réservation :</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li>Nom, prénom</li>
+                  <li>Adresse email</li>
+                  <li>Numéro de téléphone</li>
+                  <li>Dates de séjour et préférences</li>
+                  <li>Données de paiement (traitées par Stripe — Sky Travel n'y a pas accès direct)</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">3. Base légale des traitements</h2>
+                <ul className="list-disc ml-5 space-y-1">
+                  <li><strong>Exécution du contrat (Art. 6.1.b RGPD) :</strong> traitement des réservations et envoi des confirmations</li>
+                  <li><strong>Intérêt légitime (Art. 6.1.f RGPD) :</strong> amélioration de nos services et suivi client</li>
+                  <li><strong>Obligation légale (Art. 6.1.c RGPD) :</strong> conservation des données comptables et fiscales</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">4. Utilisation des données</h2>
+                <p>Vos données sont utilisées uniquement pour :</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li>Traiter vos demandes de réservation</li>
+                  <li>Vous envoyer confirmations, devis et informations pratiques</li>
+                  <li>Améliorer nos services</li>
+                  <li>Respecter nos obligations légales et comptables</li>
+                </ul>
+                <p className="mt-2"><strong>Nous ne vendons jamais vos données à des tiers.</strong></p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">5. Destinataires des données</h2>
+                <p>Vos données peuvent être transmises aux prestataires techniques suivants, dans le strict cadre de leur mission :</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li><strong>Supabase</strong> (hébergement base de données) — serveurs en UE</li>
+                  <li><strong>Vercel</strong> (hébergement du site) — États-Unis, soumis aux clauses contractuelles types UE</li>
+                  <li><strong>Stripe</strong> (traitement des paiements) — États-Unis, certifié PCI-DSS</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">6. Transferts hors Union Européenne</h2>
+                <p>
+                  Vercel et Stripe sont des prestataires américains. Ces transferts sont encadrés par les
+                  <strong> Clauses Contractuelles Types (CCT)</strong> approuvées par la Commission européenne,
+                  conformément à l'article 46 du RGPD.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">7. Conservation des données</h2>
+                <p>
+                  Vos données sont conservées pendant <strong>3 ans</strong> à compter de votre dernière
+                  interaction, sauf obligation légale de conservation plus longue (données comptables : 10 ans).
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">8. Vos droits (RGPD)</h2>
+                <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li><strong>Accès</strong> (Art. 15) : obtenir une copie de vos données</li>
+                  <li><strong>Rectification</strong> (Art. 16) : corriger des données inexactes</li>
+                  <li><strong>Suppression</strong> (Art. 17) : effacement sous conditions légales</li>
+                  <li><strong>Limitation</strong> (Art. 18) : restreindre le traitement</li>
+                  <li><strong>Portabilité</strong> (Art. 20) : recevoir vos données dans un format lisible</li>
+                  <li><strong>Opposition</strong> (Art. 21) : s'opposer au traitement fondé sur l'intérêt légitime</li>
+                </ul>
+                <p className="mt-2">
+                  Pour exercer ces droits : <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a>.
+                  Réponse sous 30 jours.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">9. Autorité de contrôle</h2>
+                <p>
+                  Si vous estimez que vos droits ne sont pas respectés, vous pouvez déposer une réclamation auprès de la{' '}
+                  <strong>CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) :{' '}
+                  <a href="https://www.cnil.fr" className="text-sky-600" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">10. Cookies</h2>
+                <p>
+                  Notre site utilise uniquement des <strong>cookies techniques strictement nécessaires</strong>
+                  au fonctionnement du site (session, préférences de langue). Aucun cookie publicitaire
+                  ou de traçage tiers n'est utilisé.
+                </p>
+              </section>
+            </>
+          ) : (
+            <>
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">1. Data Controller</h2>
+                <p>
+                  <strong>Sky Travel</strong> — Tourism concierge intermediary<br />
+                  Contact: <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a>
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">2. Data Collected</h2>
+                <p>We collect: name, email, phone number, stay dates, and payment data (processed by Stripe).</p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">3. Legal Basis</h2>
+                <ul className="list-disc ml-5 space-y-1">
+                  <li><strong>Contract performance (Art. 6.1.b GDPR):</strong> booking processing</li>
+                  <li><strong>Legitimate interest (Art. 6.1.f GDPR):</strong> service improvement</li>
+                  <li><strong>Legal obligation (Art. 6.1.c GDPR):</strong> accounting records</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">4. Data Recipients</h2>
+                <p>Data may be shared with: Supabase (database), Vercel (hosting), Stripe (payments). We never sell your data.</p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">5. International Transfers</h2>
+                <p>Vercel and Stripe are US-based. Transfers are covered by EU Standard Contractual Clauses (Art. 46 GDPR).</p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">6. Your Rights (GDPR)</h2>
+                <p>You have the right to: access, rectification, deletion, restriction, portability, and objection.
+                Contact: <a href="mailto:skytravel.sardegna@gmail.com" className="text-sky-600">skytravel.sardegna@gmail.com</a></p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">7. Supervisory Authority</h2>
+                <p>You may lodge a complaint with the French data protection authority (CNIL) at <a href="https://www.cnil.fr" className="text-sky-600" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>.</p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-slate-800 mb-3">8. Cookies</h2>
+                <p>We use only technically necessary cookies. No advertising or third-party tracking cookies are used.</p>
+              </section>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
