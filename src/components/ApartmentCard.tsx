@@ -1,9 +1,10 @@
 'use client';
 
+import { useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { Users, Bed, Bath, Star } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Users, Bed, Bath, Star, ArrowUpRight } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Apartment } from '@/lib/types';
 import { formatPrice, getStartingPrice } from '@/lib/utils';
 
@@ -14,7 +15,6 @@ interface ApartmentCardProps {
   apartment: Apartment;
 }
 
-// Génère une note stable basée sur l'ID (entre 4.6 et 5.0)
 function getStableRating(id: string): string {
   const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
   const ratings = [4.6, 4.7, 4.8, 4.8, 4.9, 4.9, 4.9, 5.0];
@@ -29,64 +29,134 @@ export default function ApartmentCard({ apartment }: ApartmentCardProps) {
   const image = apartment.images[0] || 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600';
   const rating = getStableRating(apartment.id);
 
+  // 3D tilt
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-100, 100], [6, -6]), { stiffness: 220, damping: 22 });
+  const rotateY = useSpring(useTransform(x, [-100, 100], [-6, 6]), { stiffness: 220, damping: 22 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    x.set(e.clientX - rect.left - rect.width / 2);
+    y.set(e.clientY - rect.top - rect.height / 2);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+    setIsHovering(false);
+  };
+
   return (
     <motion.div
-      className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100"
-      whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,0,0,0.12)', transition: { type: 'spring', stiffness: 280, damping: 22 } }}
+      ref={ref}
+      className="group relative bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl overflow-hidden border border-white/[0.06] hover:border-amber-400/30 transition-colors duration-500"
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformPerspective: 1200 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -6, transition: { duration: 0.4 } }}
     >
-      <div className="relative overflow-hidden h-56">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
-          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-          {rating}
-        </div>
-        <div className="absolute bottom-3 left-3 bg-sky-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-          {t('available')}
-        </div>
-      </div>
+      {/* Glow halo on hover */}
+      <motion.div
+        className="absolute -inset-px rounded-3xl bg-gradient-to-br from-amber-400/20 to-sky-400/20 opacity-0 blur-xl pointer-events-none"
+        animate={{ opacity: isHovering ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      />
 
-      <div className="p-5">
-        <div className="text-xs text-sky-600 font-medium mb-1 uppercase tracking-wide">
-          {apartment.location}
-        </div>
-        <h3 className="font-bold text-slate-800 text-lg leading-tight mb-3 line-clamp-2">
-          {title}
-        </h3>
+      <div className="relative" style={{ transform: 'translateZ(20px)' }}>
 
-        <div className="flex items-center gap-4 text-slate-500 text-sm mb-4">
-          <div className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
-            <span>{apartment.max_guests} {t('guests')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Bed className="w-4 h-4" />
-            <span>{apartment.bedrooms} {t('bedrooms')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Bath className="w-4 h-4" />
-            <span>{apartment.bathrooms}</span>
-          </div>
-        </div>
+        {/* Image with Ken Burns */}
+        <div className="relative overflow-hidden h-64 rounded-t-3xl">
+          <motion.img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover"
+            animate={{ scale: isHovering ? 1.08 : 1.02 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-          <div>
-            <div className="text-xs text-slate-400 mb-0.5">À partir de</div>
-            <span className="text-2xl font-bold text-slate-800">
-              {formatPrice(getStartingPrice(apartment.price_per_night))}
-            </span>
-            <span className="text-slate-500 text-sm"> {t('per_night')}</span>
-          </div>
-          <AnyLink
-            href={`/apartments/${apartment.id}`}
-            className="bg-sky-500 hover:bg-sky-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          {/* Rating badge */}
+          <motion.div
+            className="absolute top-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5"
+            animate={{ scale: isHovering ? 1.05 : 1 }}
+            transition={{ duration: 0.3 }}
           >
-            {t('see_details')}
-          </AnyLink>
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+            {rating}
+          </motion.div>
+
+          {/* Available badge */}
+          <div className="absolute top-4 left-4 bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+            <span className="inline-block w-1.5 h-1.5 bg-white rounded-full mr-1.5 animate-pulse" />
+            {t('available')}
+          </div>
+
+          {/* Location tag bottom */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="text-amber-300 text-[10px] font-bold tracking-[0.3em] uppercase mb-1">
+              {apartment.location}
+            </div>
+            <h3 className="font-bold text-white text-xl leading-tight line-clamp-2">
+              {title}
+            </h3>
+          </div>
+        </div>
+
+        {/* Details */}
+        <div className="p-6">
+          {/* Specs */}
+          <div className="flex items-center gap-5 text-slate-400 text-xs mb-5">
+            <div className="flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-amber-400/70" />
+              <span>{apartment.max_guests} {t('guests')}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Bed className="w-3.5 h-3.5 text-amber-400/70" />
+              <span>{apartment.bedrooms} {t('bedrooms')}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Bath className="w-3.5 h-3.5 text-amber-400/70" />
+              <span>{apartment.bathrooms}</span>
+            </div>
+          </div>
+
+          {/* Price + CTA */}
+          <div className="flex items-end justify-between pt-5 border-t border-white/[0.06]">
+            <div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">
+                À partir de
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-white tabular-nums">
+                  {formatPrice(getStartingPrice(apartment.price_per_night))}
+                </span>
+                <span className="text-slate-500 text-sm">/nuit</span>
+              </div>
+            </div>
+
+            <AnyLink
+              href={`/apartments/${apartment.id}`}
+              className="group/btn relative inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold px-4 py-3 rounded-xl transition-colors overflow-hidden"
+            >
+              <motion.span
+                className="absolute inset-0 bg-white/30"
+                initial={{ x: '-110%', skewX: '-15deg' }}
+                whileHover={{ x: '110%' }}
+                transition={{ duration: 0.5 }}
+              />
+              <span className="relative z-10">Voir</span>
+              <ArrowUpRight className="relative z-10 w-3.5 h-3.5 group-hover/btn:rotate-45 transition-transform duration-300" />
+            </AnyLink>
+          </div>
         </div>
       </div>
     </motion.div>
