@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageTracker from '@/components/PageTracker';
+import SmoothScroll from '@/components/ui/SmoothScroll';
+import CustomCursor from '@/components/ui/CustomCursor';
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,11 +16,14 @@ export default function PublicShell({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <PageTracker />
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
+    <SmoothScroll>
+      <div className="min-h-screen flex flex-col">
+        <CustomCursor />
+        <PageTracker />
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
+    </SmoothScroll>
   );
 }

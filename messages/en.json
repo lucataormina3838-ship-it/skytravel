@@ -3,10 +3,15 @@
     "home": "Home",
     "apartments": "Apartments",
     "packs": "Discovery Packs",
+    "about": "About",
+    "faq": "FAQ",
     "contact": "Contact",
     "admin": "Admin",
     "book": "Book",
     "language": "FR"
+  },
+  "about": {
+    "meta_title": "About Sky Travel"
   },
   "hero": {
     "title": "Discover Sardinia",

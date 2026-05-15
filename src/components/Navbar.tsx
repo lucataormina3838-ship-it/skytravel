@@ -28,6 +28,8 @@ export default function Navbar() {
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/apartments`, label: t('apartments') },
     { href: `/${locale}/packs`, label: t('packs') },
+    { href: `/${locale}/about`, label: t('about') },
+    { href: `/${locale}/faq`, label: t('faq') },
   ];
 
   return (

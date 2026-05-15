@@ -3,10 +3,15 @@
     "home": "Accueil",
     "apartments": "Appartements",
     "packs": "Packs Découverte",
+    "about": "À propos",
+    "faq": "FAQ",
     "contact": "Contact",
     "admin": "Admin",
     "book": "Réserver",
     "language": "EN"
+  },
+  "about": {
+    "meta_title": "À propos de Sky Travel"
   },
   "hero": {
     "title": "Découvrez la Sardaigne",

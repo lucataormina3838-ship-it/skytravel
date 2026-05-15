@@ -1,1 +1,1 @@
-{"version":"0.0.1","configurations":[{"name":"sky-travel-dev","runtimeExecutable":"npm","runtimeArgs":["run","dev"],"port":3000}]}
+{"version":"0.0.1","configurations":[{"name":"sky-travel-dev","runtimeExecutable":"npm","runtimeArgs":["run","dev"],"port":3000},{"name":"preview-devis","runtimeExecutable":"npx","runtimeArgs":["http-server",".","-p","5500","--cors"],"port":5500}]}

@@ -3,6 +3,24 @@ import { createClient } from '@/lib/supabase/server';
 import { Pack } from '@/lib/types';
 import PackCard from '@/components/PackCard';
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const isFr = locale === 'fr';
+  return {
+    title: isFr ? 'Packs Découverte Sardaigne | Sky Travel' : 'Sardinia Discovery Packs | Sky Travel',
+    description: isFr
+      ? 'Vivez des expériences authentiques en Sardaigne avec nos packs découverte : sorties en bateau, excursions quad, randonnées, nuits en forêt. Conçus par des Sardes pour les francophones.'
+      : 'Live authentic experiences in Sardinia with our discovery packs: boat trips, quad excursions, hikes, forest nights. Designed by Sardinians for French speakers.',
+    alternates: {
+      canonical: `https://skytravel-sardinia.vercel.app/${locale}/packs`,
+      languages: {
+        fr: 'https://skytravel-sardinia.vercel.app/fr/packs',
+        en: 'https://skytravel-sardinia.vercel.app/en/packs',
+      },
+    },
+  };
+}
+
 async function getPacks() {
   const supabase = await createClient();
   const { data } = await supabase.from('packs').select('*').order('featured', { ascending: false }).order('created_at', { ascending: false });

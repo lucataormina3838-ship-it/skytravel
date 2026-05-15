@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
-import { sendBookingConfirmation } from '@/lib/email';
+import { sendDevisToClient, sendAdminNotification } from '@/lib/email';
+
 
 // ─── Génère toutes les dates entre start et end (exclu) ─────────────────────
 function getDatesInRange(start: string, end: string): string[] {
@@ -36,7 +37,44 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Validations de sécurité côté serveur
+    if (!['apartment', 'pack'].includes(booking_type)) {
+      return NextResponse.json({ error: 'Invalid booking type' }, { status: 400 });
+    }
+    const priceNum = Number(total_price);
+    if (isNaN(priceNum) || priceNum <= 0 || priceNum > 50000) {
+      return NextResponse.json({ error: 'Invalid price' }, { status: 400 });
+    }
+    const guestsNum = Number(guests);
+    if (isNaN(guestsNum) || guestsNum < 1 || guestsNum > 20) {
+      return NextResponse.json({ error: 'Invalid guests count' }, { status: 400 });
+    }
+    const start = new Date(start_date);
+    const end = new Date(end_date);
+    const now = new Date();
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || start >= end || start < now) {
+      return NextResponse.json({ error: 'Invalid dates' }, { status: 400 });
+    }
+    const nights = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    if (nights > 90) {
+      return NextResponse.json({ error: 'Stay too long' }, { status: 400 });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer_email)) {
+      return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
+    }
+
     const supabase = await createAdminClient();
+
+    // Rate limiting via Supabase — max 3 réservations par email dans les dernières 24h
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await supabase
+      .from('bookings')
+      .select('*', { count: 'exact', head: true })
+      .eq('customer_email', customer_email)
+      .gte('created_at', since);
+    if ((count || 0) >= 3) {
+      return NextResponse.json({ error: 'Limite de réservations atteinte. Contactez-nous par email.' }, { status: 429 });
+    }
 
     // 1. Vérifier qu'aucune date n'est déjà bloquée (anti double-réservation)
     const dates = getDatesInRange(start_date, end_date);
@@ -86,8 +124,21 @@ export async function POST(req: NextRequest) {
     }));
     await supabase.from('blocked_dates').insert(blockedRows);
 
-    // 4. Envoyer l'email de demande au client
-    await sendBookingConfirmation(booking, locale);
+    // 4. Récupérer les photos du bien pour le devis
+    let itemImages: string[] = [];
+    if (booking_type === 'apartment') {
+      const { data: apt } = await supabase.from('apartments').select('images').eq('id', item_id).single();
+      itemImages = apt?.images?.slice(0, 4) ?? [];
+    } else {
+      const { data: pack } = await supabase.from('packs').select('images').eq('id', item_id).single();
+      itemImages = pack?.images?.slice(0, 4) ?? [];
+    }
+
+    // 5. Envoyer les emails
+    await Promise.all([
+      sendDevisToClient(booking, itemImages, locale),  // → client (devis pro avec photos)
+      sendAdminNotification(booking),                   // → skytravel.sardegna@gmail.com
+    ]);
 
     return NextResponse.json({ success: true, booking });
   } catch (err) {
@@ -96,7 +147,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  // Protéger l'accès — vérifier le secret admin
+  const secret = req.headers.get('x-admin-secret');
+  if (secret !== (process.env.ADMIN_SECRET || process.env.ADMIN_PASSWORD)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const supabase = await createAdminClient();
     const { data, error } = await supabase
@@ -112,6 +168,10 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  const secret = req.headers.get('x-admin-secret');
+  if (secret !== (process.env.ADMIN_SECRET || process.env.ADMIN_PASSWORD)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const { id, status } = await req.json();
     const supabase = await createAdminClient();

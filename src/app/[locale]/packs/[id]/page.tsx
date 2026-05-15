@@ -14,9 +14,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale, id } = await params;
   const pack = await getPack(id);
   if (!pack) return { title: 'Not Found' };
+  const isFr = locale === 'fr';
+  const title = isFr ? pack.title_fr : pack.title_en;
+  const desc = isFr ? pack.description_fr : pack.description_en;
   return {
-    title: `Sky Travel – ${locale === 'fr' ? pack.title_fr : pack.title_en}`,
-    robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+    title: `${title} – Pack Découverte Sardaigne | Sky Travel`,
+    description: desc ? `${desc.slice(0, 155)}…` : `Pack découverte en Sardaigne : ${title}. Réservez avec Sky Travel, votre agence francophone.`,
+    alternates: {
+      canonical: `https://skytravel-sardinia.vercel.app/${locale}/packs/${pack.id}`,
+    },
   };
 }
 

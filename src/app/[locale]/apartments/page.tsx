@@ -6,7 +6,20 @@ import ApartmentsGrid from '@/components/ApartmentsGrid';
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'apartments' });
-  return { title: `Sky Travel – ${t('title')}` };
+  const isFr = locale === 'fr';
+  return {
+    title: isFr ? 'Appartements & Villas en Sardaigne | Sky Travel' : 'Apartments & Villas in Sardinia | Sky Travel',
+    description: isFr
+      ? 'Découvrez nos appartements et villas en Sardaigne sélectionnés par des francophones. Locations vue mer, piscine, plage à pied à Costa Paradiso et dans tout le nord de la Sardaigne.'
+      : 'Discover our apartments and villas in Sardinia selected by French speakers. Sea view rentals, pool, beach access in Costa Paradiso and northern Sardinia.',
+    alternates: {
+      canonical: `https://skytravel-sardinia.vercel.app/${locale}/apartments`,
+      languages: {
+        fr: 'https://skytravel-sardinia.vercel.app/fr/apartments',
+        en: 'https://skytravel-sardinia.vercel.app/en/apartments',
+      },
+    },
+  };
 }
 
 async function getApartments() {

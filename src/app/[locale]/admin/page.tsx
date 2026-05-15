@@ -1,7 +1,18 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { formatPrice } from '@/lib/utils';
-import { CalendarCheck, Home, Package, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { CalendarCheck, Home, Package, TrendingUp, Clock, CheckCircle, ExternalLink, Lock } from 'lucide-react';
 import Link from 'next/link';
+
+const SOURCES = [
+  { nom: 'Villetta Blanche – Cote Nord Sauvage', url: 'https://www.sardiniaunlimited.com/italy/sardinia/costa-paradiso/villetta-ambra-white/', site: 'sardiniaunlimited.com' },
+  { nom: 'Villa Cedrino – Nature et Vue Montagne', url: 'https://www.booking.com/hotel/it/b-b-valle-del-cedrino.fr.html', site: 'booking.com' },
+  { nom: 'Suite Corallo – Village Sarde Authentique', url: 'https://www.booking.com/hotel/it/alloggio-in-pieno-centro-storico-di-orosei.fr.html', site: 'booking.com' },
+  { nom: 'Villa Marina – Vue Mer et Jardin Fleuri', url: 'https://www.booking.com/hotel/it/le-residenze-del-maria-rosaria-via-leonardo-da-vinci-14.fr.html', site: 'booking.com' },
+  { nom: "Resort L'Emeraude – Piscine et Spa", url: 'https://www.booking.com/hotel/it/santa-maria-resort.fr.html', site: 'booking.com' },
+  { nom: 'Villa Pietra – Coeur Historique de Sardaigne', url: 'https://www.booking.com/hotel/it/etra-vacanze.fr.html', site: 'booking.com' },
+  { nom: 'Mas des Collines Sardes – Nature et Authenticite', url: 'https://www.booking.com/hotel/it/funtan-39-arva.fr.html', site: 'booking.com' },
+  { nom: 'Villa Acqua Cristallo', url: 'https://www.sardiniaunlimited.com/italy/sardinia/costa-paradiso/casa-rosa-blu/', site: 'sardiniaunlimited.com' },
+];
 
 async function getStats() {
   const supabase = await createAdminClient();
@@ -48,7 +59,30 @@ export default async function AdminDashboard({ params }: { params: Promise<{ loc
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-slate-800">Tableau de bord</h1>
-        <p className="text-slate-500 text-sm mt-1">Vue d&apos;ensemble de l&apos;activité Sky Travel</p>
+        <p className="text-slate-500 text-sm mt-1">Vue d&apos;ensemble de l&apos;activité Sky Travel — v2</p>
+      </div>
+
+      {/* Sources des biens */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100">
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+          <Lock className="w-4 h-4 text-slate-400" />
+          <h2 className="font-semibold text-slate-800">Sources des biens</h2>
+          <span className="text-xs text-red-400 font-medium ml-1">— usage interne uniquement</span>
+        </div>
+        <div className="divide-y divide-slate-50">
+          {SOURCES.map((s, i) => (
+            <div key={i} className="flex items-center justify-between px-6 py-3 hover:bg-slate-50">
+              <div>
+                <p className="text-sm font-medium text-slate-800">{s.nom}</p>
+                <p className="text-xs text-slate-400">{s.site}</p>
+              </div>
+              <a href={s.url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors shrink-0">
+                <ExternalLink className="w-3 h-3" /> Voir
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Stats */}
@@ -115,6 +149,28 @@ export default async function AdminDashboard({ params }: { params: Promise<{ loc
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+      {/* Sources des biens */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100">
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
+          <Lock className="w-4 h-4 text-slate-400" />
+          <h2 className="font-semibold text-slate-800">Sources des biens</h2>
+          <span className="text-xs text-slate-400 ml-1">— usage interne uniquement</span>
+        </div>
+        <div className="divide-y divide-slate-50">
+          {SOURCES.map((s, i) => (
+            <div key={i} className="flex items-center justify-between px-6 py-3 hover:bg-slate-50">
+              <div>
+                <p className="text-sm font-medium text-slate-800">{s.nom}</p>
+                <p className="text-xs text-slate-400">{s.site}</p>
+              </div>
+              <a href={s.url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors shrink-0">
+                <ExternalLink className="w-3 h-3" /> Voir
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -3,16 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plane, LayoutDashboard, Home, Package, CalendarCheck, LogOut, Menu, X, BarChart2 } from 'lucide-react';
+import { Plane, LayoutDashboard, Home, Package, CalendarCheck, LogOut, Menu, X, BarChart2, Link2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'sky-travel-admin-2024';
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -20,14 +19,49 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     if (auth === 'true') setAuthenticated(true);
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Timeout inactivité 30 minutes
+  useEffect(() => {
+    if (!authenticated) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const reset = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setAuthenticated(false);
+        sessionStorage.removeItem('sky-admin-auth');
+      }, 30 * 60 * 1000);
+    };
+    reset();
+    window.addEventListener('mousemove', reset);
+    window.addEventListener('keydown', reset);
+    window.addEventListener('click', reset);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('mousemove', reset);
+      window.removeEventListener('keydown', reset);
+      window.removeEventListener('click', reset);
+    };
+  }, [authenticated]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD || password === 'sky-travel-admin-2024') {
-      setAuthenticated(true);
-      sessionStorage.setItem('sky-admin-auth', 'true');
-      setError('');
-    } else {
-      setError('Mot de passe incorrect');
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/admin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setAuthenticated(true);
+        sessionStorage.setItem('sky-admin-auth', 'true');
+      } else {
+        setError('Mot de passe incorrect');
+      }
+    } catch {
+      setError('Erreur de connexion');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,8 +93,8 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
               />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl transition-colors">
-              Se connecter
+            <button type="submit" disabled={loading} className="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white font-bold py-3 rounded-xl transition-colors">
+              {loading ? 'Vérification...' : 'Se connecter'}
             </button>
           </form>
           <p className="text-center text-xs text-slate-400 mt-6">Sky Travel Admin · Accès restreint</p>
@@ -76,6 +110,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     { href: `/${locale}/admin/packs`, label: 'Packs', icon: Package },
     { href: `/${locale}/admin/bookings`, label: 'Réservations', icon: CalendarCheck },
     { href: `/${locale}/admin/analytics`, label: 'Statistiques', icon: BarChart2 },
+    { href: `/${locale}/admin/sources`, label: 'Sources des biens', icon: Link2 },
   ];
 
   return (
@@ -98,7 +133,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           </button>
         </div>
 
-        <nav className="px-3 py-4 space-y-1">
+        <nav className="px-3 py-4 space-y-1 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 130px)' }}>
           {navItems.map(item => {
             const isActive = pathname === item.href;
             return (
@@ -120,7 +155,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-slate-800 bg-slate-900">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-2 px-3 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg text-sm transition-all"

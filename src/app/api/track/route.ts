@@ -4,14 +4,29 @@ import { createAdminClient } from '@/lib/supabase/server';
 export async function POST(req: NextRequest) {
   try {
     const { page } = await req.json();
-    // Ignore les pages admin
     if (page?.includes('/admin')) return NextResponse.json({ ok: true });
 
+    // Valider que page est une vraie URL interne (commence par /)
+    if (!page || typeof page !== 'string' || !page.startsWith('/') || page.length > 200) {
+      return NextResponse.json({ ok: true }); // Silencieux — ne pas révéler la validation
+    }
+
     const supabase = await createAdminClient();
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+
+    // Rate limit : max 60 vues/IP/heure (protège les stats)
+    const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count } = await supabase
+      .from('page_views')
+      .select('*', { count: 'exact', head: true })
+      .eq('country', ip) // On réutilise le champ country pour stocker l'IP temporairement
+      .gte('created_at', since);
+    if ((count || 0) >= 60) return NextResponse.json({ ok: true });
+
     const country = req.headers.get('x-vercel-ip-country') || null;
     const referrer = req.headers.get('referer') || null;
 
-    await supabase.from('page_views').insert({ page: page || '/', referrer, country });
+    await supabase.from('page_views').insert({ page, referrer, country });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ ok: false });

@@ -1,5 +1,16 @@
 import { createAdminClient } from '@/lib/supabase/server';
-import { Users, TrendingUp, Eye, Calendar, Globe } from 'lucide-react';
+import { Users, TrendingUp, Eye, Calendar, Globe, ExternalLink, Lock } from 'lucide-react';
+
+const SOURCES: Record<string, { url: string; site: string }> = {
+  'Villetta Blanche – Cote Nord Sauvage': { url: 'https://www.sardiniaunlimited.com/italy/sardinia/costa-paradiso/villetta-ambra-white/', site: 'sardiniaunlimited.com' },
+  'Villa Cedrino – Nature et Vue Montagne': { url: 'https://www.booking.com/hotel/it/b-b-valle-del-cedrino.fr.html', site: 'booking.com' },
+  'Suite Corallo – Village Sarde Authentique': { url: 'https://www.booking.com/hotel/it/alloggio-in-pieno-centro-storico-di-orosei.fr.html', site: 'booking.com' },
+  'Villa Marina – Vue Mer et Jardin Fleuri': { url: 'https://www.booking.com/hotel/it/le-residenze-del-maria-rosaria-via-leonardo-da-vinci-14.fr.html', site: 'booking.com' },
+  "Resort L'Emeraude – Piscine et Spa": { url: 'https://www.booking.com/hotel/it/santa-maria-resort.fr.html', site: 'booking.com' },
+  'Villa Pietra – Coeur Historique de Sardaigne': { url: 'https://www.booking.com/hotel/it/etra-vacanze.fr.html', site: 'booking.com' },
+  'Mas des Collines Sardes – Nature et Authenticite': { url: 'https://www.booking.com/hotel/it/funtan-39-arva.fr.html', site: 'booking.com' },
+  'Villa Acqua Cristallo': { url: 'https://www.sardiniaunlimited.com/italy/sardinia/costa-paradiso/casa-rosa-blu/', site: 'sardiniaunlimited.com' },
+};
 
 async function getStats() {
   const supabase = await createAdminClient();
@@ -116,6 +127,33 @@ export default async function AnalyticsPage() {
             })}
           </div>
         )}
+      </div>
+
+      {/* Sources des biens */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+        <h2 className="font-bold text-slate-800 mb-1 flex items-center gap-2">
+          <Lock className="w-4 h-4 text-slate-400" /> Sources des biens
+        </h2>
+        <p className="text-xs text-slate-400 mb-4">Usage interne — ne pas partager avec les clients</p>
+        <div className="space-y-2">
+          {Object.entries(SOURCES).map(([name, source]) => (
+            <div key={name} className="flex items-center justify-between gap-4 py-2.5 border-b border-slate-100 last:border-0">
+              <div>
+                <p className="text-sm font-medium text-slate-800">{name}</p>
+                <p className="text-xs text-slate-400">{source.site}</p>
+              </div>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-flex items-center gap-1.5 bg-sky-50 hover:bg-sky-100 text-sky-600 font-medium text-xs px-3 py-1.5 rounded-lg transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Voir
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

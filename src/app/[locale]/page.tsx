@@ -11,6 +11,7 @@ import WhyChooseUs from '@/components/home/WhyChooseUs';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import CtaBanner from '@/components/home/CtaBanner';
 import AnimatedSection from '@/components/ui/AnimatedSection';
+import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -129,13 +130,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         stats={stats}
       />
 
+      {/* Marquee */}
+      <InfiniteMarquee />
+
       {/* Featured Apartments */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-24 px-4 bg-slate-950">
         <div className="max-w-7xl mx-auto">
-          <AnimatedSection className="text-center mb-12">
-            <div className="text-sky-500 font-semibold text-sm uppercase tracking-wider mb-2">Hébergements</div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">{tHome('featured_title')}</h2>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">{tHome('featured_subtitle')}</p>
+          <AnimatedSection className="text-center mb-14">
+            <span className="inline-block text-amber-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">Hébergements</span>
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">{tHome('featured_title')}</h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto">{tHome('featured_subtitle')}</p>
           </AnimatedSection>
 
           {apartments.length > 0 ? (
@@ -151,20 +155,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
 
           <AnimatedSection className="text-center">
-            <Link href="/apartments" className="inline-flex items-center gap-2 text-sky-600 font-semibold hover:text-sky-700 transition-colors">
-              Voir tous les appartements <ChevronRight className="w-4 h-4" />
+            <Link href="/apartments" className="inline-flex items-center gap-2 text-amber-400 font-semibold hover:text-amber-300 transition-colors group">
+              Voir toutes les villas <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </AnimatedSection>
         </div>
       </section>
 
+      {/* Second marquee reversed */}
+      <InfiniteMarquee reverse />
+
       {/* Packs */}
-      <section className="py-20 px-4 bg-slate-50">
+      <section className="py-24 px-4 bg-[#080d1a]">
         <div className="max-w-7xl mx-auto">
-          <AnimatedSection className="text-center mb-12">
-            <div className="text-sky-500 font-semibold text-sm uppercase tracking-wider mb-2">Expériences</div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">{tHome('packs_title')}</h2>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">{tHome('packs_subtitle')}</p>
+          <AnimatedSection className="text-center mb-14">
+            <span className="inline-block text-sky-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">Expériences</span>
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">{tHome('packs_title')}</h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto">{tHome('packs_subtitle')}</p>
           </AnimatedSection>
 
           {packs.length > 0 ? (
@@ -180,8 +187,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
 
           <AnimatedSection className="text-center">
-            <Link href="/packs" className="inline-flex items-center gap-2 text-sky-600 font-semibold hover:text-sky-700 transition-colors">
-              Voir tous les packs <ChevronRight className="w-4 h-4" />
+            <Link href="/packs" className="inline-flex items-center gap-2 text-sky-400 font-semibold hover:text-sky-300 transition-colors group">
+              Voir toutes les expériences <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </AnimatedSection>
         </div>
