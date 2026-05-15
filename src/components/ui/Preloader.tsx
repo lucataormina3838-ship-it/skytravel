@@ -77,7 +77,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       >
         <div className="relative w-[800px] h-[800px] max-w-[80vw] max-h-[80vh]">
           <img
-            src="https://images.unsplash.com/photo-1591608971362-f08b2a75731a?w=1600&q=85"
+            src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=1600&q=85&auto=format&fit=crop"
             alt="Sardaigne vue aérienne"
             className="w-full h-full object-cover rounded-full shadow-[0_0_120px_rgba(64,150,220,0.4)]"
             style={{

@@ -14,21 +14,16 @@ export default function PublicShell({ children }: { children: React.ReactNode })
   const isAdmin = pathname.includes('/admin');
 
   const [showPreloader, setShowPreloader] = useState(true);
-  const [hasShownPreloader, setHasShownPreloader] = useState(false);
 
   useEffect(() => {
-    // Only show preloader once per session
-    const shown = sessionStorage.getItem('preloader-shown');
-    if (shown) {
-      setShowPreloader(false);
-      setHasShownPreloader(true);
-    }
+    // Show preloader only on first visit per session — use new key to invalidate old
+    const shown = sessionStorage.getItem('intro-v3-shown');
+    if (shown) setShowPreloader(false);
   }, []);
 
   const handleComplete = () => {
     setShowPreloader(false);
-    setHasShownPreloader(true);
-    sessionStorage.setItem('preloader-shown', '1');
+    sessionStorage.setItem('intro-v3-shown', '1');
   };
 
   if (isAdmin) {
