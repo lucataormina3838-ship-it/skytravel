@@ -5,7 +5,6 @@ import ApartmentsGrid from '@/components/ApartmentsGrid';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'apartments' });
   const isFr = locale === 'fr';
   return {
     title: isFr ? 'Appartements & Villas en Sardaigne | Sky Travel' : 'Apartments & Villas in Sardinia | Sky Travel',
@@ -34,13 +33,33 @@ export default async function ApartmentsPage({ params }: { params: Promise<{ loc
   const apartments = await getApartments();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-slate-800 to-sky-900 pt-32 pb-16 px-4 text-center">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-sky-300 font-semibold text-sm uppercase tracking-wider mb-3">Sardaigne</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">{t('title')}</h1>
-          <p className="text-slate-300 text-lg">{t('subtitle')}</p>
+    <div className="min-h-screen bg-slate-950">
+      {/* Premium hero header */}
+      <div className="relative pt-40 pb-24 px-4 overflow-hidden">
+        {/* Background gradient + glow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-amber-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto text-center relative">
+          <div className="inline-block text-amber-400 text-xs font-bold tracking-[0.3em] uppercase mb-5">
+            Collection · Sardaigne
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.05] tracking-tight">
+            Nos villas<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
+              d&apos;exception
+            </span>
+          </h1>
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+            {t('subtitle')}
+          </p>
+
+          {/* Decorative line */}
+          <div className="flex items-center justify-center gap-4 mt-10">
+            <div className="h-px w-12 bg-amber-400/50" />
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <div className="h-px w-12 bg-amber-400/50" />
+          </div>
         </div>
       </div>
 

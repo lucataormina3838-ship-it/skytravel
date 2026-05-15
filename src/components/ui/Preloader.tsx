@@ -1,103 +1,117 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-
-// Multi-language greetings — Sardaigne / Méditerranée
-const words = ['Benvenuto', 'Bienvenue', 'Welcome', 'Bienvenido', 'Hallå', 'Willkommen', 'Sardegna'];
-
-const opacity = {
-  initial: { opacity: 0 },
-  enter: { opacity: 0.85, transition: { duration: 1, delay: 0.2 } },
-};
-
-const slideUp = {
-  initial: { top: 0 },
-  exit: { top: '-100vh', transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 } },
-};
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface PreloaderProps {
   onComplete?: () => void;
 }
 
+const TITLE = 'SARDAIGNE';
+
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [index, setIndex] = useState(0);
-  const [dimension, setDimension] = useState({ width: 0, height: 0 });
-  const [isExiting, setIsExiting] = useState(false);
+  const [stage, setStage] = useState<'enter' | 'hold' | 'split'>('enter');
 
   useEffect(() => {
-    setDimension({ width: window.innerWidth, height: window.innerHeight });
-  }, []);
-
-  useEffect(() => {
-    if (index === words.length - 1) {
-      setTimeout(() => {
-        setIsExiting(true);
-        setTimeout(() => onComplete?.(), 1100);
-      }, 900);
-      return;
-    }
-    setTimeout(() => setIndex(index + 1), index === 0 ? 900 : 180);
-  }, [index, onComplete]);
-
-  const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width / 2} ${dimension.height + 300} 0 ${dimension.height} L0 0`;
-  const targetPath  = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width / 2} ${dimension.height} 0 ${dimension.height} L0 0`;
-
-  const curve = {
-    initial: { d: initialPath, transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] as const } },
-    exit:    { d: targetPath,  transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] as const, delay: 0.3 } },
-  };
+    const t1 = setTimeout(() => setStage('hold'), 1100);   // text done revealing
+    const t2 = setTimeout(() => setStage('split'), 2200);  // curtain split
+    const t3 = setTimeout(() => onComplete?.(), 3300);     // hide
+    return () => {
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+    };
+  }, [onComplete]);
 
   return (
-    <motion.div
-      variants={slideUp}
-      initial="initial"
-      animate={isExiting ? 'exit' : 'initial'}
-      className="fixed inset-0 w-screen h-screen flex items-center justify-center bg-[#070b13] z-[99999]"
-    >
-      {dimension.width > 0 && (
-        <>
-          {/* Brand label top */}
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[99999] pointer-events-none">
+
+        {/* Top curtain */}
+        <motion.div
+          className="absolute top-0 left-0 right-0 bg-[#070b13] origin-top"
+          initial={{ height: '50vh' }}
+          animate={{ height: stage === 'split' ? '0vh' : '50vh' }}
+          transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+        />
+
+        {/* Bottom curtain */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 bg-[#070b13] origin-bottom"
+          initial={{ height: '50vh' }}
+          animate={{ height: stage === 'split' ? '0vh' : '50vh' }}
+          transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+        />
+
+        {/* Center content */}
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center"
+          animate={{ opacity: stage === 'split' ? 0 : 1 }}
+          transition={{ duration: 0.4 }}
+        >
+
+          {/* Brand label */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            className="text-amber-300/80 text-[10px] tracking-[0.5em] uppercase font-light mb-8"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="absolute top-10 left-1/2 -translate-x-1/2 text-amber-300/70 text-[10px] tracking-[0.4em] uppercase font-light"
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            Sky Travel · Sardaigne
+            Sky Travel · Présente
           </motion.div>
 
-          {/* Animated word */}
-          <motion.p
-            key={index}
-            variants={opacity}
-            initial="initial"
-            animate="enter"
-            className="flex items-center text-white text-5xl md:text-7xl absolute z-10 font-light tracking-tight"
-          >
-            <span className="block w-2.5 h-2.5 bg-amber-400 rounded-full mr-4 animate-pulse" />
-            {words[index]}
-          </motion.p>
+          {/* Big title — letter by letter clip reveal */}
+          <div className="flex items-baseline overflow-hidden">
+            {TITLE.split('').map((letter, i) => (
+              <span key={i} className="overflow-hidden inline-block">
+                <motion.span
+                  className="inline-block text-white text-6xl md:text-9xl font-light tracking-[0.05em]"
+                  style={{ fontFamily: "'Georgia', serif" }}
+                  initial={{ y: '110%' }}
+                  animate={{ y: stage === 'split' ? '-110%' : '0%' }}
+                  transition={{
+                    duration: 0.8,
+                    delay: i * 0.05 + 0.3,
+                    ease: [0.76, 0, 0.24, 1],
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              </span>
+            ))}
+          </div>
 
-          {/* Loader bottom */}
+          {/* Subtitle line + dot + line */}
           <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 2.5, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="absolute bottom-16 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent origin-left"
-          />
-
-          {/* Curved exit mask */}
-          <svg className="absolute top-0 left-0 w-full h-[calc(100%+300px)]">
-            <motion.path
-              variants={curve}
-              initial="initial"
-              animate={isExiting ? 'exit' : 'initial'}
-              fill="#070b13"
+            className="flex items-center gap-4 mt-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+          >
+            <motion.div
+              className="h-px bg-amber-400/70"
+              initial={{ width: 0 }}
+              animate={{ width: 48 }}
+              transition={{ duration: 0.7, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
             />
-          </svg>
-        </>
-      )}
-    </motion.div>
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <motion.div
+              className="h-px bg-amber-400/70"
+              initial={{ width: 0 }}
+              animate={{ width: 48 }}
+              transition={{ duration: 0.7, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </motion.div>
+
+          {/* Tagline */}
+          <motion.div
+            className="text-white/50 text-xs tracking-[0.3em] uppercase mt-5 font-light"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+          >
+            L&apos;île des Méditerranéens
+          </motion.div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
   );
 }
