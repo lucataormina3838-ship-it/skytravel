@@ -242,9 +242,11 @@ export default function ApartmentDetailClient({ apartment, blockedDates, locale 
               />
             </div>
 
-            {/* Summary panel next to calendar */}
+            {/* Summary panel next to calendar — shows form when step is 'form' */}
             <div className="w-full lg:w-72 flex-shrink-0">
               <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+
+                {/* Price header — always visible */}
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-2xl font-bold text-slate-800">{formatPrice(nightlyPrice)}</span>
                   <span className="text-slate-500 text-sm">/ nuit</span>
@@ -253,64 +255,141 @@ export default function ApartmentDetailClient({ apartment, blockedDates, locale 
                   <span className={`inline-flex text-xs font-semibold px-2 py-0.5 rounded-full mb-3 ${seasonInfo.color}`}>{seasonInfo.label}</span>
                 )}
 
-                {/* Date fields */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="bg-white rounded-xl border border-slate-200 px-3 py-2.5">
-                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">{t('checkin')}</div>
-                    <div className="text-sm font-semibold text-slate-800">
-                      {dateRange?.from
-                        ? dateRange.from.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'short' })
-                        : '—'}
-                    </div>
+                {step === 'success' ? (
+                  <div className="text-center py-6">
+                    <CheckCircle2 className="w-14 h-14 text-green-500 mx-auto mb-3" />
+                    <h3 className="text-lg font-bold text-slate-800 mb-1">Réservation envoyée !</h3>
+                    <p className="text-slate-500 text-xs">Email envoyé à {formData.email}</p>
                   </div>
-                  <div className="bg-white rounded-xl border border-slate-200 px-3 py-2.5">
-                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">{t('checkout')}</div>
-                    <div className="text-sm font-semibold text-slate-800">
-                      {dateRange?.to
-                        ? dateRange.to.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'short' })
-                        : '—'}
+                ) : step === 'form' ? (
+                  <>
+                    {/* FORM right at top */}
+                    <h3 className="font-bold text-slate-800 mt-3 mb-3 text-sm">{t('your_info')}</h3>
+                    <div className="space-y-2.5">
+                      <input
+                        type="text"
+                        placeholder={t('name')}
+                        value={formData.name}
+                        onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent"
+                        required
+                      />
+                      <input
+                        type="email"
+                        placeholder={t('email')}
+                        value={formData.email}
+                        onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent"
+                        required
+                      />
+                      <input
+                        type="tel"
+                        placeholder={t('phone')}
+                        value={formData.phone}
+                        onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent"
+                        required
+                      />
+                      <textarea
+                        placeholder={t('message')}
+                        value={formData.message}
+                        onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                        rows={2}
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent resize-none"
+                      />
                     </div>
-                  </div>
-                </div>
 
-                {/* Guests */}
-                <div className="flex items-center justify-between bg-white rounded-xl border border-slate-200 px-4 py-3 mb-4">
-                  <span className="text-sm text-slate-600 font-medium">{t('guests_label')}</span>
-                  <div className="flex items-center gap-3">
-                    <button onClick={() => setGuests(Math.max(1, guests - 1))}
-                      className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center font-bold text-slate-600 hover:border-sky-400 hover:text-sky-600 transition-colors">−</button>
-                    <span className="font-semibold text-slate-800 w-5 text-center">{guests}</span>
-                    <button onClick={() => setGuests(Math.min(apartment.max_guests, guests + 1))}
-                      className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center font-bold text-slate-600 hover:border-sky-400 hover:text-sky-600 transition-colors">+</button>
-                  </div>
-                </div>
+                    {/* Quick summary of selected dates */}
+                    {nights > 0 && (
+                      <div className="bg-white rounded-xl border border-slate-200 px-3 py-2 mt-3 text-xs text-slate-600 flex justify-between">
+                        <span>{nights} nuit{nights > 1 ? 's' : ''} · {guests} pers.</span>
+                        <span className="font-bold text-sky-600">{formatPrice(total)}</span>
+                      </div>
+                    )}
 
-                {/* Price breakdown */}
-                {nights > 0 && seasonInfo ? (
-                  <div className="bg-sky-50 rounded-xl p-3 mb-4 text-sm space-y-1.5">
-                    <div className={`inline-flex text-xs font-semibold px-2 py-0.5 rounded-full ${seasonInfo.color}`}>{seasonInfo.label}</div>
-                    <div className="flex justify-between text-slate-600">
-                      <span>{formatPrice(nightlyPrice)} × {nights} nuit{nights > 1 ? 's' : ''}</span>
-                      <span>{formatPrice(total)}</span>
+                    {bookingError && (
+                      <div className="mt-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg px-3 py-2">
+                        {bookingError}
+                      </div>
+                    )}
+
+                    {/* Action buttons */}
+                    <div className="flex gap-2 mt-3">
+                      <button
+                        onClick={() => setStep('calendar')}
+                        className="flex-1 border border-slate-200 text-slate-600 py-2.5 rounded-lg text-xs hover:bg-slate-50 transition-colors"
+                      >
+                        ← Retour
+                      </button>
+                      <button
+                        onClick={handleBook}
+                        disabled={loading || !formData.name || !formData.email || !formData.phone}
+                        className="flex-[1.6] bg-sky-500 hover:bg-sky-600 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-2.5 rounded-lg text-xs transition-colors"
+                      >
+                        {loading ? '...' : t('confirm_booking')}
+                      </button>
                     </div>
-                    <div className="flex justify-between font-bold text-slate-800 pt-1.5 border-t border-sky-200">
-                      <span>{t('total')}</span>
-                      <span className="text-sky-600">{formatPrice(total)}</span>
-                    </div>
-                  </div>
+                  </>
                 ) : (
-                  <div className="text-xs text-slate-400 text-center py-2 mb-4">
-                    {locale === 'fr' ? 'Sélectionnez des dates pour voir le prix total' : 'Select dates to see total price'}
-                  </div>
-                )}
+                  <>
+                    {/* CALENDAR step: dates + guests + total + button */}
+                    <div className="grid grid-cols-2 gap-2 mb-4">
+                      <div className="bg-white rounded-xl border border-slate-200 px-3 py-2.5">
+                        <div className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">{t('checkin')}</div>
+                        <div className="text-sm font-semibold text-slate-800">
+                          {dateRange?.from
+                            ? dateRange.from.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'short' })
+                            : '—'}
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-xl border border-slate-200 px-3 py-2.5">
+                        <div className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">{t('checkout')}</div>
+                        <div className="text-sm font-semibold text-slate-800">
+                          {dateRange?.to
+                            ? dateRange.to.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'short' })
+                            : '—'}
+                        </div>
+                      </div>
+                    </div>
 
-                <button
-                  onClick={() => dateRange?.from && dateRange?.to && setStep('form')}
-                  disabled={!dateRange?.from || !dateRange?.to}
-                  className="w-full bg-sky-500 hover:bg-sky-600 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3 rounded-xl transition-colors text-sm"
-                >
-                  {t('confirm_booking')}
-                </button>
+                    <div className="flex items-center justify-between bg-white rounded-xl border border-slate-200 px-4 py-3 mb-4">
+                      <span className="text-sm text-slate-600 font-medium">{t('guests_label')}</span>
+                      <div className="flex items-center gap-3">
+                        <button onClick={() => setGuests(Math.max(1, guests - 1))}
+                          className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center font-bold text-slate-600 hover:border-sky-400 hover:text-sky-600 transition-colors">−</button>
+                        <span className="font-semibold text-slate-800 w-5 text-center">{guests}</span>
+                        <button onClick={() => setGuests(Math.min(apartment.max_guests, guests + 1))}
+                          className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center font-bold text-slate-600 hover:border-sky-400 hover:text-sky-600 transition-colors">+</button>
+                      </div>
+                    </div>
+
+                    {nights > 0 && seasonInfo ? (
+                      <div className="bg-sky-50 rounded-xl p-3 mb-4 text-sm space-y-1.5">
+                        <div className={`inline-flex text-xs font-semibold px-2 py-0.5 rounded-full ${seasonInfo.color}`}>{seasonInfo.label}</div>
+                        <div className="flex justify-between text-slate-600">
+                          <span>{formatPrice(nightlyPrice)} × {nights} nuit{nights > 1 ? 's' : ''}</span>
+                          <span>{formatPrice(total)}</span>
+                        </div>
+                        <div className="flex justify-between font-bold text-slate-800 pt-1.5 border-t border-sky-200">
+                          <span>{t('total')}</span>
+                          <span className="text-sky-600">{formatPrice(total)}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-xs text-slate-400 text-center py-2 mb-4">
+                        {locale === 'fr' ? 'Sélectionnez des dates pour voir le prix total' : 'Select dates to see total price'}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => dateRange?.from && dateRange?.to && setStep('form')}
+                      disabled={!dateRange?.from || !dateRange?.to}
+                      className="w-full bg-sky-500 hover:bg-sky-600 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3 rounded-xl transition-colors text-sm"
+                    >
+                      {t('confirm_booking')}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
