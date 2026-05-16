@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageTracker from '@/components/PageTracker';
 import SmoothScroll from '@/components/ui/SmoothScroll';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,6 +17,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
 
   return (
     <SmoothScroll>
+      <ScrollProgress />
       <div className="min-h-screen flex flex-col">
         <PageTracker />
         <Navbar />

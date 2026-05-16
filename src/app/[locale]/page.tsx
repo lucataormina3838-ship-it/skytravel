@@ -12,6 +12,7 @@ import TestimonialsSection from '@/components/home/TestimonialsSection';
 import CtaBanner from '@/components/home/CtaBanner';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
+import MapSection from '@/components/home/MapSection';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -196,6 +197,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* Exclusive Packs */}
       <ExclusivePacks />
+
+      {/* Map interactive Sardaigne */}
+      <MapSection />
 
       {/* Why choose us */}
       <WhyChooseUs />

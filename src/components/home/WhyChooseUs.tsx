@@ -1,9 +1,11 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Award, Shield, Headphones, MapPin, Star, Users } from 'lucide-react';
 import { useRef } from 'react';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
+import GradientMesh from '@/components/ui/GradientMesh';
+import SplitText from '@/components/ui/SplitText';
 
 const stats = [
   { value: 200, suffix: '+', label: 'Clients satisfaits', icon: Users },
@@ -50,6 +52,9 @@ export default function WhyChooseUs() {
 
   return (
     <section className="py-32 px-4 bg-slate-950 relative overflow-hidden" ref={ref}>
+      {/* Animated gradient mesh background */}
+      <GradientMesh intensity="subtle" />
+
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-sky-500/4 rounded-full blur-3xl pointer-events-none" />
 
@@ -67,9 +72,10 @@ export default function WhyChooseUs() {
             Pourquoi nous choisir
           </span>
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            L&apos;excellence<br />
+            <SplitText text="L'excellence" by="char" stagger={0.04} duration={0.7} />
+            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-              à chaque étape
+              <SplitText text="à chaque étape" by="char" stagger={0.04} duration={0.7} delay={0.4} />
             </span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
