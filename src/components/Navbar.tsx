@@ -52,7 +52,8 @@ export default function Navbar() {
               alt="Sky Travel"
               width={160}
               height={60}
-              className="block [mix-blend-mode:multiply]"
+              className="block"
+              style={{ mixBlendMode: 'screen' }}
               priority
             />
           </NextLink>
