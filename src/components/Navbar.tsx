@@ -53,7 +53,6 @@ export default function Navbar() {
               width={160}
               height={60}
               className="block"
-              style={{ mixBlendMode: 'screen' }}
               priority
             />
           </NextLink>
