@@ -32,16 +32,15 @@ export default function Navbar() {
     { href: `/${locale}/faq`, label: t('faq') },
   ];
 
-  const linkColor = scrolled ? 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' : 'text-white/95 hover:text-white hover:bg-white/15';
-  const langColor = scrolled ? 'border-slate-300 text-slate-700 hover:border-slate-500' : 'border-white/30 text-white/90 hover:border-white/60';
+  const linkColor = 'text-white hover:bg-white/15';
+  const langColor = 'border-white/30 text-white/90 hover:border-white/60';
 
   return (
     <motion.nav
-      className="sticky top-0 w-full z-50 border-b"
+      className="sticky top-0 w-full z-50"
       animate={{
-        backgroundColor: scrolled ? 'rgba(255,255,255,0.92)' : 'rgba(0,0,0,0.12)',
-        borderColor: scrolled ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.0)',
-        backdropFilter: 'blur(16px)',
+        backgroundColor: scrolled ? 'rgba(0,0,0,0.20)' : 'rgba(0,0,0,0.0)',
+        backdropFilter: scrolled ? 'blur(12px)' : 'blur(0px)',
       }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
     >
@@ -98,7 +97,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 rounded-lg ${scrolled ? 'text-slate-800' : 'text-white'}`}
+            className="md:hidden p-2 rounded-lg text-white"
             whileTap={{ scale: 0.9 }}
           >
             <AnimatePresence mode="wait" initial={false}>
