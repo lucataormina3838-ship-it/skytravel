@@ -13,22 +13,22 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    image: 'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=1600&q=85&auto=format&fit=crop',
+    image: '/sardaigne/aerial-beach-turquoise.jpg',
     headline: 'Imagine te réveiller',
     highlight: 'ici',
-    subtitle: 'Sardaigne · Méditerranée',
+    subtitle: 'Sardaigne · Cala Mariolu',
   },
   {
-    image: 'https://images.unsplash.com/photo-1605538883669-825200433431?w=1600&q=85&auto=format&fit=crop',
+    image: '/sardaigne/pool-sea-view.jpg',
     headline: 'Dans ta villa',
     highlight: 'privée',
     subtitle: 'Piscine · Vue mer · dès 98€/nuit',
   },
   {
-    image: 'https://images.unsplash.com/photo-1502301197179-65228ab57f78?w=1600&q=85&auto=format&fit=crop',
-    headline: 'À 2 heures',
-    highlight: 'de chez toi',
-    subtitle: 'Vol direct Paris–Cagliari',
+    image: '/sardaigne/scenic-turquoise-beach.jpg',
+    headline: 'Eau turquoise',
+    highlight: 'irréelle',
+    subtitle: 'Top 3 mondial · Golfe de Orosei',
   },
 ];
 
