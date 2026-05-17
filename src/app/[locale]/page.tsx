@@ -135,12 +135,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <InfiniteMarquee />
 
       {/* Featured Apartments */}
-      <section className="py-24 px-4 bg-slate-950">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 px-4 bg-gradient-to-b from-[#fef9e8] to-white relative overflow-hidden">
+        {/* Sardinian sun glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-amber-200/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative">
           <AnimatedSection className="text-center mb-14">
-            <span className="inline-block text-amber-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">Hébergements</span>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">{tHome('featured_title')}</h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">{tHome('featured_subtitle')}</p>
+            <span className="inline-block text-amber-600 text-xs font-bold tracking-[0.3em] uppercase mb-4">Hébergements</span>
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-5 leading-tight">{tHome('featured_title')}</h2>
+            <p className="text-slate-600 text-lg max-w-xl mx-auto">{tHome('featured_subtitle')}</p>
           </AnimatedSection>
 
           {apartments.length > 0 ? (
@@ -156,7 +158,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
 
           <AnimatedSection className="text-center">
-            <Link href="/apartments" className="inline-flex items-center gap-2 text-amber-400 font-semibold hover:text-amber-300 transition-colors group">
+            <Link href="/apartments" className="inline-flex items-center gap-2 text-amber-600 font-bold hover:text-amber-500 transition-colors group">
               Voir toutes les villas <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </AnimatedSection>
@@ -167,12 +169,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <InfiniteMarquee reverse />
 
       {/* Packs */}
-      <section className="py-24 px-4 bg-[#080d1a]">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 px-4 bg-gradient-to-b from-[#e0f7ff] to-[#fef9e8] relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/3 w-[600px] h-[300px] bg-cyan-200/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative">
           <AnimatedSection className="text-center mb-14">
-            <span className="inline-block text-sky-400 text-xs font-bold tracking-[0.3em] uppercase mb-4">Expériences</span>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">{tHome('packs_title')}</h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">{tHome('packs_subtitle')}</p>
+            <span className="inline-block text-cyan-700 text-xs font-bold tracking-[0.3em] uppercase mb-4">Expériences</span>
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-5 leading-tight">{tHome('packs_title')}</h2>
+            <p className="text-slate-600 text-lg max-w-xl mx-auto">{tHome('packs_subtitle')}</p>
           </AnimatedSection>
 
           {packs.length > 0 ? (
@@ -188,7 +191,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
 
           <AnimatedSection className="text-center">
-            <Link href="/packs" className="inline-flex items-center gap-2 text-sky-400 font-semibold hover:text-sky-300 transition-colors group">
+            <Link href="/packs" className="inline-flex items-center gap-2 text-cyan-700 font-bold hover:text-cyan-600 transition-colors group">
               Voir toutes les expériences <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </AnimatedSection>

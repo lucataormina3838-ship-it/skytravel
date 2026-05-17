@@ -32,12 +32,15 @@ export default function Navbar() {
     { href: `/${locale}/faq`, label: t('faq') },
   ];
 
+  const linkColor = scrolled ? 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' : 'text-white/95 hover:text-white hover:bg-white/15';
+  const langColor = scrolled ? 'border-slate-300 text-slate-700 hover:border-slate-500' : 'border-white/30 text-white/90 hover:border-white/60';
+
   return (
     <motion.nav
       className="sticky top-0 w-full z-50 border-b"
       animate={{
-        backgroundColor: scrolled ? 'rgba(15,23,42,0.90)' : 'rgba(15,23,42,0.60)',
-        borderColor: scrolled ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.04)',
+        backgroundColor: scrolled ? 'rgba(255,255,255,0.92)' : 'rgba(0,0,0,0.12)',
+        borderColor: scrolled ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.0)',
         backdropFilter: 'blur(16px)',
       }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
@@ -63,7 +66,7 @@ export default function Navbar() {
               <NextLink
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${linkColor}`}
               >
                 {link.label}
               </NextLink>
@@ -74,13 +77,13 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={switchLocalePath}
-              className="text-sm font-medium px-3 py-1.5 rounded-lg border border-white/20 text-white/80 hover:text-white hover:border-white/40 transition-all duration-200"
+              className={`text-sm font-medium px-3 py-1.5 rounded-lg border transition-all duration-200 ${langColor}`}
             >
               {t('language')}
             </a>
             <NextLink
               href={`/${locale}/apartments`}
-              className="relative overflow-hidden bg-amber-400 hover:bg-amber-300 text-slate-900 text-sm font-bold px-5 py-2 rounded-lg transition-colors shadow-sm"
+              className="relative overflow-hidden bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold px-5 py-2 rounded-lg transition-colors shadow-md shadow-amber-500/30"
             >
               <motion.span
                 className="absolute inset-0 bg-white/30"
@@ -95,7 +98,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-white"
+            className={`md:hidden p-2 rounded-lg ${scrolled ? 'text-slate-800' : 'text-white'}`}
             whileTap={{ scale: 0.9 }}
           >
             <AnimatePresence mode="wait" initial={false}>

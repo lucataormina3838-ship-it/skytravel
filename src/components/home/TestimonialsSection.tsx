@@ -39,9 +39,9 @@ export default function TestimonialsSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section className="py-32 px-4 bg-[#080d1a] relative overflow-hidden" ref={ref}>
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.06)_0%,transparent_60%)]" />
+    <section className="py-32 px-4 bg-gradient-to-b from-[#fef9e8] to-white relative overflow-hidden" ref={ref}>
+      {/* Sardinian sun glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-amber-200/30 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative">
 
@@ -53,12 +53,12 @@ export default function TestimonialsSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="inline-block text-amber-400 text-xs font-bold tracking-[0.3em] uppercase mb-5">
+          <span className="inline-block text-amber-600 text-xs font-bold tracking-[0.3em] uppercase mb-5">
             Ils nous font confiance
           </span>
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
             Ce qu&apos;ils disent<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-blue-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-cyan-800">
               de leur séjour
             </span>
           </h2>
@@ -76,7 +76,7 @@ export default function TestimonialsSection() {
                 <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
               </motion.div>
             ))}
-            <span className="ml-3 text-slate-400 text-sm">5.0 · 200+ avis</span>
+            <span className="ml-3 text-slate-600 text-sm">5.0 · 200+ avis</span>
           </div>
         </motion.div>
 
@@ -85,7 +85,7 @@ export default function TestimonialsSection() {
           {testimonials.map(({ name, city, rating, text, trip, avatar, color }, i) => (
             <motion.div
               key={i}
-              className="relative p-8 rounded-3xl bg-white/[0.03] border border-white/[0.07] group overflow-hidden"
+              className="relative p-8 rounded-3xl bg-white shadow-lg shadow-amber-100/40 border border-amber-100 hover:border-amber-300 group overflow-hidden"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
@@ -101,7 +101,7 @@ export default function TestimonialsSection() {
               />
 
               {/* Quote icon */}
-              <Quote className="w-8 h-8 text-white/10 mb-6 -scale-x-100" />
+              <Quote className="w-8 h-8 text-amber-400/30 mb-6 -scale-x-100" />
 
               {/* Stars */}
               <div className="flex gap-1 mb-5">
@@ -111,7 +111,7 @@ export default function TestimonialsSection() {
               </div>
 
               {/* Text */}
-              <p className="text-slate-300 leading-relaxed text-sm mb-8 italic">&ldquo;{text}&rdquo;</p>
+              <p className="text-slate-700 leading-relaxed text-sm mb-8 italic">&ldquo;{text}&rdquo;</p>
 
               {/* Author */}
               <div className="flex items-center gap-3 mt-auto">
@@ -119,8 +119,8 @@ export default function TestimonialsSection() {
                   {avatar}
                 </div>
                 <div>
-                  <div className="text-white font-semibold text-sm">{name}</div>
-                  <div className="text-slate-500 text-xs">{city} · {trip}</div>
+                  <div className="text-slate-900 font-semibold text-sm">{name}</div>
+                  <div className="text-slate-600 text-xs">{city} · {trip}</div>
                 </div>
               </div>
             </motion.div>

@@ -53,7 +53,7 @@ export default function ApartmentCard({ apartment }: ApartmentCardProps) {
   return (
     <motion.div
       ref={ref}
-      className="group relative bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl overflow-hidden border border-white/[0.06] hover:border-amber-400/30 transition-colors duration-500"
+      className="group relative bg-white rounded-3xl overflow-hidden border border-amber-100 hover:border-amber-400 shadow-md shadow-amber-100/30 hover:shadow-xl hover:shadow-amber-200/40 transition-all duration-500"
       style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformPerspective: 1200 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
@@ -114,7 +114,7 @@ export default function ApartmentCard({ apartment }: ApartmentCardProps) {
         {/* Details */}
         <div className="p-6">
           {/* Specs */}
-          <div className="flex items-center gap-5 text-slate-400 text-xs mb-5">
+          <div className="flex items-center gap-5 text-slate-600 text-xs mb-5">
             <div className="flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-amber-400/70" />
               <span>{apartment.max_guests} {t('guests')}</span>
@@ -130,13 +130,13 @@ export default function ApartmentCard({ apartment }: ApartmentCardProps) {
           </div>
 
           {/* Price + CTA */}
-          <div className="flex items-end justify-between pt-5 border-t border-white/[0.06]">
+          <div className="flex items-end justify-between pt-5 border-t border-amber-100">
             <div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">
+              <div className="text-[10px] text-amber-700 uppercase tracking-widest mb-1 font-bold">
                 À partir de
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-white tabular-nums">
+                <span className="text-3xl font-bold text-slate-900 tabular-nums">
                   {formatPrice(getStartingPrice(apartment.price_per_night))}
                 </span>
                 <span className="text-slate-500 text-sm">/nuit</span>
